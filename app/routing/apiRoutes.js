@@ -25,7 +25,6 @@ module.exports = function (app) {
             var total = 0;
             for (var n = 0; n < array.length; n++) {
                 total += parseInt(array[n]);
-
             }
             return total;
         }
@@ -36,7 +35,7 @@ module.exports = function (app) {
 
         for (var i = 0; i < operatorList.length; i++) {
             operatorTotal = sum(operatorList[i].scores);
-            //console.log(operatorTotal);
+
             if (operatorTotal == userTotal) {
                 bestMatch.name = operatorList[i].name;
                 bestMatch.photo = operatorList[i].photo;
