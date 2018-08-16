@@ -1,59 +1,47 @@
-//The operator dependancies
-var operatorList = require('../data/friends.js');
+var operators = require("../data/friends");
 
-var bodyParser = require('body-parser');
-var path = require('path');
+module.exports = function(app) {
+  // Return all operators found in friend.js as JSON
+  app.get("/api/friends", function(req, res) {
+    res.json(operators);
+  });
 
-module.exports = function (app) {
+  app.post("/api/friends", function(req, res) {
+    console.log(req.body.scores);
 
-    // Search for Specific Character (or all characters) - provides JSON
-    app.get('/api/friends', function (req, res) {
-        res.json(operatorList);
-    });
+    // Receive user details (name, photo, scores)
+    var user = req.body;
 
-    //Creating New Characters - takes in JSON data
+    // parseInt for scores
+    for(var i = 0; i < user.scores.length; i++) {
+      user.scores[i] = parseInt(user.scores[i]);
+    };
 
-    app.post('/api/friends', function (req, res) {
+    // default operator match is the first operator but result will be whoever has the minimum difference in scores
+    var operatorIndex = 0;
+    var minimumDifference = 40;
 
-        //The functions that will return our match
-        var bestMatch = {
-            'name': 'none',
-            'photo': 'none'
-        };
+    // in this for-loop, start off with a zero difference and compare the user and the ith friend scores, one set at a time
+    //  whatever the difference is, add to the total difference
+    for(var i = 0; i < operators.length; i++) {
+      var totalDifference = 0;
+      console.log(operators[i].score);
+      for(var j = 0; j < operators[i].score.length; j++) {
+        var difference = Math.abs(user.scores[j] - operators[i].score[j]);
+        totalDifference += difference;
+      }
 
-        function sum(array) {
-            var total = 0;
-            for (var n = 0; n < array.length; n++) {
-                total += parseInt(array[n]);
-            }
-            return total;
-        }
+      // if there is a new minimum, change the best friend index and set the new minimum for next iteration comparisons
+      if(totalDifference < minimumDifference) {
+        operatorIndex = i;
+        minimumDifference = totalDifference;
+      }
+    }
 
-        var userTotal = sum(req.body.scores);
+    // after finding match, add user to friend array
+    operators.push(user);
 
-        var operatorTotal = 0;
-
-        for (var i = 0; i < operatorList.length; i++) {
-            operatorTotal = sum(operatorList[i].scores);
-
-            if (operatorTotal == userTotal) {
-                bestMatch.name = operatorList[i].name;
-                bestMatch.photo = operatorList[i].photo;
-            }
-        };
-        if (bestMatch.name == 'none') {
-            var closest = 50;
-
-            for (var i = 0; i < operatorList.length; i++) {
-                operatorTotal = sum(operatorList[i].scores);
-                var difference = Math.abs(operatorTotal - userTotal);
-                if (difference <= closest) {
-                    closest = difference;
-                    bestMatch.name = operatorList[i].name;
-                    bestMatch.photo = operatorList[i].photo;
-                };
-            };
-        };
-        res.json(bestMatch);
-    });
+    // send back to browser the best friend match
+    res.json(operators[operatorIndex]);
+  });
 };
