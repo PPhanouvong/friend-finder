@@ -7,14 +7,13 @@ module.exports = function(app) {
   });
 
   app.post("/api/friends", function(req, res) {
-    console.log(req.body.scores);
 
     // Receive user details (name, photo, scores)
     var user = req.body;
 
     // parseInt for scores
-    for(var i = 0; i < user.scores.length; i++) {
-      user.scores[i] = parseInt(user.scores[i]);
+    for(var i = 0; i < user.score.length; i++) {
+      user.score[i] = parseInt(user.score[i]);
     };
 
     // default operator match is the first operator but result will be whoever has the minimum difference in scores
@@ -23,17 +22,17 @@ module.exports = function(app) {
     // res.json(user);
     // in this for-loop, start off with a zero difference and compare the user and the ith friend scores, one set at a time
     //  whatever the difference is, add to the total difference
-    for(var i = 0; i < operators.length; i++) {
+    for(var n = 0; n < operators.length; n++) {
       var totalDifference = 0;
-      console.log(operators[i].score);
-      for(var j = 0; j < operators[i].score.length; j++) {
-        var difference = Math.abs(user.scores[j] - operators[i].score[j]);
+      console.log(operators[n].score);
+      for(var j = 0; j < operators[n].score.length; j++) {
+        var difference = Math.abs(user.score[j] - operators[n].score[j]);
         totalDifference += difference;
       }
 
       // if there is a new minimum, change the best friend index and set the new minimum for next iteration comparisons
       if(totalDifference < minimumDifference) {
-        operatorIndex = i;
+        operatorIndex = n;
         minimumDifference = totalDifference;
       }
     }
