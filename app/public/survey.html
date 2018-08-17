@@ -193,7 +193,7 @@
             };
             console.log(newOperator);
 
-            var currentURL = window.location.origin;
+            // var currentURL = window.location.origin;
             $.post("/api/friends", newOperator, function (data) {
                 $("#bestFriend").text(data.name);
                 $("#bestFriendPhoto").attr("src", data.photo);
