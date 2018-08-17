@@ -25,7 +25,7 @@ module.exports = function(app) {
     //  whatever the difference is, add to the total difference
     for(var i = 0; i < operators.length; i++) {
       var totalDifference = 0;
-      // console.log(operators[i].score);
+      console.log(operators[i].score);
       for(var j = 0; j < operators[i].score.length; j++) {
         var difference = Math.abs(user.scores[j] - operators[i].score[j]);
         totalDifference += difference;
