@@ -20,7 +20,7 @@ module.exports = function(app) {
     // default operator match is the first operator but result will be whoever has the minimum difference in scores
     var operatorIndex = 0;
     var minimumDifference = 40;
-
+    res.json(user);
     // in this for-loop, start off with a zero difference and compare the user and the ith friend scores, one set at a time
     //  whatever the difference is, add to the total difference
     for(var i = 0; i < operators.length; i++) {
