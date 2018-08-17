@@ -37,7 +37,8 @@ module.exports = function(app) {
         minimumDifference = totalDifference;
       }
     }
-
+    console.log(minimumDifference);
+    console.log(totalDifference);
     // after finding match, add user to friend array
     operators.push(user);
 
